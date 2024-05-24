@@ -2,6 +2,7 @@ package ru.sidey383;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +36,7 @@ public class IntervalsRestAPI {
         this.characterIntervalRepository = characterIntervalRepository;
     }
 
-    @RequestMapping(value = "/merge", params = "kind")
+    @PostMapping(value = "/merge", params = "kind")
     public ResponseEntity<?> makeMerge(@RequestParam String kind, @RequestBody String body) {
         Kind k = Kind.getKind(kind);
         if (k == null) {
@@ -60,7 +61,7 @@ public class IntervalsRestAPI {
         }
     }
 
-    @RequestMapping(value = "/min", params = "kind")
+    @GetMapping(value = "/min", params = "kind")
     public ResponseEntity<?> selectMin(@RequestParam String kind) {
         Kind k = Kind.getKind(kind);
         if (k == null) {
@@ -70,7 +71,7 @@ public class IntervalsRestAPI {
             case DIGITS -> {
                 NumberInterval ni = numberIntervalRepository.getMinimalInterval();
                 if (ni == null)
-                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                    return new ResponseEntity<>( HttpStatus.NO_CONTENT);
                 else
                     return new ResponseEntity<>(ni.toArray(), HttpStatus.OK);
             }
@@ -87,7 +88,7 @@ public class IntervalsRestAPI {
         }
     }
 
-    @RequestMapping(value = "/stored", params = "kind")
+    @GetMapping(value = "/stored", params = "kind")
     public ResponseEntity<?> getIntervals(@RequestParam String kind) {
         Kind k = Kind.getKind(kind);
         if (k == null) {
